@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Container, Form, Row, Col, Button } from 'react-bootstrap'
+import { Container, Form, Button, Row } from 'react-bootstrap'
 import axios from 'axios'
-import { useNavigate  } from 'react-router-dom' 
+import { Link } from 'react-router-dom'
 
 
 export default class Create extends Component {
     constructor(props) {
         super(props)
-      
+
         this.state = {
             firstname: '',
             lastname: '',
@@ -18,7 +18,7 @@ export default class Create extends Component {
 
 
     readInput(event) {
-        this.setState({[event.target.name] : event.target.value})
+        this.setState({ [event.target.name]: event.target.value })
         event.preventDefault();
     }
 
@@ -29,30 +29,35 @@ export default class Create extends Component {
             lastname: this.state.lastname,
             emailId: this.state.emailId
         }
-        console.log(newEmployee)
-        axios.post("http://localhost:8081/api/v1/employees",  newEmployee )
+        axios.post("http://localhost:8081/api/v1/employees", newEmployee)
             .then(res => console.log(res))
+            .catch(error => console.log(error.response.data))
     }
 
 
     render() {
         return (
-            <Container style={{ marginTop: '100px' }}>
-                <h1>Add Employee</h1>
-                <Form  style={{ margin: '50px' }}>
-                    <Row>
-                        <Col>
-                            <Form.Control placeholder="Employee First Name" name="firstname"  onChange={this.readInput} />
-                        </Col>
-                        <Col>
-                            <Form.Control placeholder="Employee Last Name" name="lastname"  onChange={this.readInput} />
-                        </Col>
-                        <Col>
-                            <Form.Control placeholder="Employee Email" name="emailId"  onChange={this.readInput} />
-                        </Col>
-                    </Row>
-                    <Button style={{ margin: '30px', float: 'right', backgroundColor: 'red', borderStyle: 'none' }}>Cancel</Button>
-                    <Button onClick={this.createNewEmployee} style={{ margin: '30px', float: 'right' }}>Add Employee</Button>
+            <Container style={{ marginTop: '100px' , textAlign: '-webkit-center' }}>
+                <h2 className='mb-5'>Add Employee</h2>
+
+                <Form>
+                    <Form.Group className="mb-3 w-50" controlId="formBasicEmail">
+                        <Form.Label>Firstname</Form.Label>
+                        <Form.Control placeholder="Employee First Name" name="firstname" onChange={this.readInput} />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3 w-50" controlId="formBasicPassword">
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control placeholder="Employee Last Name" name="lastname" onChange={this.readInput} />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3 w-50" controlId="formBasicPassword">
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control type='email' placeholder="Employee Email" name="emailId" onChange={this.readInput}  />
+                    </Form.Group>
+
+                    <Link to={`/`}><Button onClick={() => this.createNewEmployee()} style={{ margin: '30px' }}>Add</Button></Link>
+                    <Link to={`/`}><Button variant="danger" style={{ margin: '30px' }}>Cancel</Button></Link>
                 </Form>
             </Container>
         )
